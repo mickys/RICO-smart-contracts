@@ -23,14 +23,26 @@ describe("ERC777 - RICO Token", function () {
 
         before(async function () {
 
+            // deploy a ReversableICOMock777
+            this.ReversableICOMock777 = await helpers.utils.deployNewContractInstance(
+                helpers, "ReversableICOMock777", {
+                    from: holder,
+                    gas: 3500000,
+                    gasPrice: helpers.solidity.gwei * 10
+                }
+            );
+
+            _ricoAddress = this.ReversableICOMock777.receipt.contractAddress;
+
             this.RicoToken = await helpers.utils.deployNewContractInstance(
                 helpers, "RicoToken", {
                     from: holder,
                     arguments: [
                         setup.settings.token.supply.toString(),
-                        defaultOperators
+                        defaultOperators,
+                        _ricoAddress
                     ],
-                    gas: 3500000,
+                    gas: 6500000,
                     gasPrice: helpers.solidity.gwei * 10
                 }
             );
@@ -41,8 +53,8 @@ describe("ERC777 - RICO Token", function () {
             helpers.addresses.Token = this.RicoToken.receipt.contractAddress;
         });
 
-        it("Gas usage should be lower than 3.5m.", function () {
-            expect(this.RicoToken.receipt.gasUsed).to.be.below(3500000);
+        it("Gas usage should be lower than 6.5m.", function () {
+            expect(this.RicoToken.receipt.gasUsed).to.be.below(6500000);
         });
 
         describe('basic information', function () {

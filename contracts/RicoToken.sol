@@ -1,7 +1,11 @@
 pragma solidity ^0.5.0;
 
 import "./zeppelin/token/ERC777/ERC777.sol";
-import "./ReversableICO.sol";
+// import "./ReversableICO.sol";
+// use the interface instead of the actual contract.. easier for etherscan validation
+interface ReversableICO {
+    function getLockedTokenAmount(address) external returns (uint256);
+}
 
 contract RicoToken is ERC777 {
     
